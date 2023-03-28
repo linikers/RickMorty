@@ -1,6 +1,9 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import styles from "@/styles/Home.module.css";
+import Header from "../components/Header/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,8 +29,18 @@ interface IHomeProps {
   personas: iPersona[];
 }
 
-export default async function Home({ personas }: IHomeProps) {
-  const images = personas.map((persona) => getImg(persona.id));
+export default function Home({ personas }: IHomeProps) {
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchImgs = async () => {
+      const urls = await Promise.all(
+        personas.map((persona) => getImg(persona.id))
+      );
+      setImageUrls(urls);
+    };
+    fetchImgs();
+  }, [personas]);
 
   return (
     <>
@@ -37,35 +50,32 @@ export default async function Home({ personas }: IHomeProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div>
-          <h1>Rick and Morty show</h1>
-        </div>
 
-        <ul>
-          {await (async () => {
-            const imageUrls = await Promise.all(images);
-
-            return imageUrls.map((imageUrl, index) => (
-              <li key={personas[index].id}>
+      <Header />
+      <main className={styles.main}>
+        <ul className={styles.listPersona}>
+          {imageUrls.length > 0 &&
+            imageUrls.map((imageUrl, index) => (
+              <li key={personas[index].id} className={styles.card}>
                 <Image
                   src={imageUrl}
                   alt={personas[index].name}
-                  width={300}
-                  height={250}
+                  width={200}
+                  height={180}
+                  quality={75}
                 />
-                <h3>{personas[index].name}</h3>
+                <h2>{personas[index].name}</h2>
                 <p>{personas[index].species}</p>
+                <button>Favorito</button>
               </li>
-            ));
-          })()}
+            ))}
         </ul>
       </main>
     </>
   );
 }
 
-async function getImg(id) {
+async function getImg(id: number) {
   const response = await fetch(
     `https://rickandmortyapi.com/api/character/${id}`
   );

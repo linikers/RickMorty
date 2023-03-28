@@ -1,0 +1,13 @@
+.top {
+  background-color: var(--color-blue-2);
+
+  width: 100vw;
+  height: 140px;
+
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+.logo {
+  padding-left: 2rem;
+}
