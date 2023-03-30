@@ -33,7 +33,7 @@ export default function Header() {
           height={79}
         />
       </figure>
-      <SearchBox />
+
       <form onSubmit={handleSearch}>
         <input
           id="search"
