@@ -10,8 +10,23 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Search() {
   const router = useRouter();
+
+  const [searchQuey, setSearchQuery] = useState("");
   const [personSearch, setPersonSearch] = useState([]);
-  const { q } = router.query;
+
+  useEffect(() => {
+    const { q } = router.query;
+
+    if (q) {
+      setSearchQuery(q.toString());
+    }
+  }, [router.query]);
+
+  async function SearchPerson(person: string) {
+    const searchPersona = `=${person}`;
+    const { personas } = await getSearchProps(searchPersona);
+    setPersonSearch(personas);
+  }
   return (
     <>
       <Head>
@@ -22,8 +37,23 @@ export default function Search() {
       </Head>
       <Header />
       <main className={styles.main}>
-        <h2>Resultados para {q}</h2>
+        <h2>Resultados para {searchQuey}</h2>
+        {personSearch.map((person) => (
+          <Card key={person.id} person={person} />
+        ))}
       </main>
     </>
   );
+}
+
+export async function getSearchProps(q: string) {
+  const response = await fetch(
+    `https://rickandmortyapi.com/api/character/?name=${q}`
+  );
+  console.log(response);
+  const { results: personas } = await response.json();
+  console.log(personas);
+  return {
+    personas,
+  };
 }

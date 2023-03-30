@@ -3,24 +3,26 @@ import logo from "../../../public/logo.svg";
 import styles from "@/styles/Header.module.css";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
-import SearchBox from "../Search";
 
 export default function Header() {
   const [search, setSearch] = useState("");
 
   const router = useRouter();
 
-  const handleSearch = (e: any) => {
-    e.preventDefault();
+  const handleSearch = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-    console.log(search);
+      console.log(search);
+      if (!search.trim()) {
+        return;
+      }
+      router.push(`/search?q=${search.trim()}`);
+      setSearch("");
+    },
+    [search, router]
+  );
 
-    console.log(search);
-    if (!search) return;
-
-    router.push(`search?q=${search}`);
-    setSearch("");
-  };
   return (
     <header className={styles.top}>
       <figure>
