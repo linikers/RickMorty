@@ -13,20 +13,54 @@ export default function Search() {
 
   const [searchQuey, setSearchQuery] = useState("");
   const [personSearch, setPersonSearch] = useState([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  async function getSearchProps(q: string) {
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/character/?name=${q}`
+    );
+    console.log(response);
+    const { results: personas } = await response.json();
+    console.log(personas);
+    return {
+      personas,
+    };
+  }
+
+  function SearchPerson(persona: string) {
+    const searchPersona = persona;
+    getSearchProps(searchPersona).then(({ personas }) => {
+      setPersonSearch(personas);
+    });
+  }
 
   useEffect(() => {
     const { q } = router.query;
 
     if (q) {
       setSearchQuery(q.toString());
+      SearchPerson(q.toString());
     }
   }, [router.query]);
 
-  async function SearchPerson(person: string) {
-    const searchPersona = `=${person}`;
-    const { personas } = await getSearchProps(searchPersona);
-    setPersonSearch(personas);
-  }
+  useEffect(() => {
+    const fetchImgs = async () => {
+      const urls = await Promise.all(
+        personSearch.map(async (persona, index) => {
+          const response = await fetch(persona.image);
+          const blob = await response.blob();
+          const imageUrl = URL.createObjectURL(blob);
+          return imageUrl;
+        })
+      );
+
+      setImageUrls(urls);
+    };
+    if (personSearch.length > 0) {
+      fetchImgs();
+    }
+  }, [personSearch]);
+
   return (
     <>
       <Head>
@@ -38,22 +72,17 @@ export default function Search() {
       <Header />
       <main className={styles.main}>
         <h2>Resultados para {searchQuey}</h2>
-        {personSearch.map((person) => (
-          <Card key={person.id} person={person} />
+        {console.log(imageUrls)}
+        {personSearch.map((persona, index) => (
+          <Card
+            key={persona.id}
+            id={index}
+            image={imageUrls[index]}
+            name={persona.name}
+            specie={persona.species}
+          />
         ))}
       </main>
     </>
   );
-}
-
-export async function getSearchProps(q: string) {
-  const response = await fetch(
-    `https://rickandmortyapi.com/api/character/?name=${q}`
-  );
-  console.log(response);
-  const { results: personas } = await response.json();
-  console.log(personas);
-  return {
-    personas,
-  };
 }
