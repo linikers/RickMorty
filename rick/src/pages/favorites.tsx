@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
+import Favorites from "../components/Favorites/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <main>
         <div>
-          <h1>Personagens Favoritos</h1>
+          <Favorites />
         </div>
       </main>
     </>

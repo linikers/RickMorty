@@ -12,12 +12,11 @@ export default function Header() {
   const handleSearch: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    console.log(search);
     if (!search.trim()) {
       return;
     }
     const result = await searchPerson(search.trim());
-    console.log(result);
+
     router.push(`/search?q=${search.trim()}`);
     setSearch("");
   };

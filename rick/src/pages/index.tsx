@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import Header from "../components/Header/index";
 import Card from "@/components/Card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { iPersona } from "@/components/Card/ipersona";
+import { FavoriteContext } from "@/contexts/context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +15,9 @@ interface IHomeProps {
 
 export default function Home({ personas }: IHomeProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  const { favorites } = useContext(FavoriteContext);
+  console.log(favorites);
 
   useEffect(() => {
     const fetchImgs = async () => {

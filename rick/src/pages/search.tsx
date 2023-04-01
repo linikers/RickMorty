@@ -19,9 +19,9 @@ export default function Search() {
     const response = await fetch(
       `https://rickandmortyapi.com/api/character/?name=${q}`
     );
-    console.log(response);
+
     const { results: personas } = await response.json();
-    console.log(personas);
+
     return {
       personas,
     };
@@ -72,7 +72,7 @@ export default function Search() {
       <Header />
       <main className={styles.main}>
         <h2>Resultados para {searchQuey}</h2>
-        {console.log(imageUrls)}
+
         {personSearch.map((persona, index) => (
           <Card
             key={persona.id}
