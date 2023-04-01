@@ -5,7 +5,7 @@ import Header from "../components/Header/index";
 import Card from "@/components/Card";
 import { useState, useEffect, useContext } from "react";
 import { iPersona } from "@/components/Card/ipersona";
-import { FavoriteContext } from "@/contexts/context";
+import { FavoriteContext } from "@/context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +17,6 @@ export default function Home({ personas }: IHomeProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const { favorites } = useContext(FavoriteContext);
-  console.log(favorites);
 
   useEffect(() => {
     const fetchImgs = async () => {
@@ -44,17 +43,19 @@ export default function Home({ personas }: IHomeProps) {
 
       <Header />
       <main className={styles.main}>
-        <ul className={styles.listPersona}>
-          {personas &&
-            personas.map((persona, index) => (
-              <Card
-                key={persona.id}
-                image={imageUrls[index]}
-                name={persona.name}
-                specie={persona.species}
-              />
-            ))}
-        </ul>
+        <div>
+          <ul className={styles.listPersona}>
+            {personas &&
+              personas.map((persona, index) => (
+                <Card
+                  key={persona.id}
+                  image={imageUrls[index]}
+                  name={persona.name}
+                  specie={persona.species}
+                />
+              ))}
+          </ul>
+        </div>
       </main>
     </>
   );
@@ -63,7 +64,7 @@ export async function getStaticProps() {
   const response = await fetch("https://rickandmortyapi.com/api/character");
   console.log(response);
   const { results: personas } = await response.json();
-  console.log(personas);
+
   return {
     props: {
       personas,
@@ -75,6 +76,6 @@ export async function getImg(id: number) {
     `https://rickandmortyapi.com/api/character/${id}`
   );
   const data = await response.json();
-  console.log(data.image);
+
   return data.image;
 }

@@ -1,0 +1,21 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+}
+.listPersona {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style: none;
+}
+.favMsg {
+  font-size: 1.6rem;
+  color: var(--color-brown-0);
+}
+.favB {
+  font-weight: 800;
+}

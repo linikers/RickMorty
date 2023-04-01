@@ -3,6 +3,7 @@ import logo from "../../../public/logo.svg";
 import styles from "@/styles/Header.module.css";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Header() {
   const [search, setSearch] = useState("");
@@ -23,7 +24,7 @@ export default function Header() {
 
   return (
     <header className={styles.top}>
-      <figure>
+      <Link href="/">
         <Image
           className={styles.logo}
           src={logo}
@@ -32,17 +33,20 @@ export default function Header() {
           width={270}
           height={79}
         />
-      </figure>
+      </Link>
 
-      <form onSubmit={handleSearch}>
+      <form className={styles.formSearch} onSubmit={handleSearch}>
         <input
+          className={styles.inputSearch}
           id="search"
           type="text"
           placeholder="Pesquisa"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />
-        <button type="submit">Busca</button>
+        <button className={styles.btnSearch} type="submit">
+          Busca
+        </button>
       </form>
     </header>
   );

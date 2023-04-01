@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Card from "@/components/Card";
 import Header from "@/components/Header";
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Search.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -72,16 +72,17 @@ export default function Search() {
       <Header />
       <main className={styles.main}>
         <h2>Resultados para {searchQuey}</h2>
-
-        {personSearch.map((persona, index) => (
-          <Card
-            key={persona.id}
-            id={index}
-            image={imageUrls[index]}
-            name={persona.name}
-            specie={persona.species}
-          />
-        ))}
+        <ul className={styles.listPersona}>
+          {personSearch.map((persona, index) => (
+            <Card
+              key={persona.id}
+              id={index}
+              image={imageUrls[index]}
+              name={persona.name}
+              specie={persona.species}
+            />
+          ))}
+        </ul>
       </main>
     </>
   );
