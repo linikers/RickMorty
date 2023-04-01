@@ -34,7 +34,9 @@ export default function Header() {
           height={79}
         />
       </Link>
-
+      <Link className={styles.fav} href="/favorites">
+        Favoritos
+      </Link>
       <form className={styles.formSearch} onSubmit={handleSearch}>
         <input
           className={styles.inputSearch}

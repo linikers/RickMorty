@@ -15,7 +15,7 @@ interface IFavoritesProps {
 
 export default function Favorites({ personas }: IFavoritesProps) {
   const { favorites } = useContext(FavoriteContext);
-
+  console.log(favorites);
   const favoritesPersonas = personas.filter((persona) =>
     favorites.includes(persona.id)
   );
@@ -44,7 +44,7 @@ export default function Favorites({ personas }: IFavoritesProps) {
             ))
           ) : (
             <p className={styles.favMsg}>
-              <b>“Wubba Lubba Dub Dub”</b>
+              <b className={styles.favB}>“Wubba Lubba Dub Dub”</b>
               <br /> Você ainda não tem nenhum personagem favorito.
             </p>
           )}

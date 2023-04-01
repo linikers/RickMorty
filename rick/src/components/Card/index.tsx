@@ -21,11 +21,11 @@ export default function Card({ id, name, image, specie }: iCard) {
     console.log("click");
     const favorite = { id, name, image, specie };
     setFavorites([...favorites, favorite]);
-    console.log(favorites);
   };
   useEffect(() => {
     console.log(favorites);
   });
+
   return (
     <li key={id} className={styles.card}>
       <Image src={image} alt={name} width={200} height={180} quality={75} />
