@@ -32,8 +32,8 @@ export default function Favorites({ personas }: IFavoritesProps) {
       <Header />
       <main className={styles.main}>
         <ul className={styles.listPersona}>
-          {favoritesPersonas.length > 0 ? (
-            favoritesPersonas.map((persona) => (
+          {favorites.length > 0 ? (
+            favorites.map((persona) => (
               <Card
                 key={persona.id}
                 id={persona.id}
