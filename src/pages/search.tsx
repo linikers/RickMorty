@@ -5,14 +5,15 @@ import { useRouter } from "next/router";
 import Card from "@/components/Card";
 import Header from "@/components/Header";
 import styles from "@/styles/Search.module.css";
+import { iPersona } from "@/components/Card/ipersona";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Search() {
+export default async function Search() {
   const router = useRouter();
 
   const [searchQuey, setSearchQuery] = useState("");
-  const [personSearch, setPersonSearch] = useState([]);
+  const [personSearch, setPersonSearch] = useState<iPersona[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   async function getSearchProps(q: string) {
@@ -43,23 +44,40 @@ export default function Search() {
     }
   }, [router.query]);
 
-  useEffect(() => {
-    const fetchImgs = async () => {
-      const urls = await Promise.all(
-        personSearch.map(async (persona, index) => {
-          const response = await fetch(persona.image);
-          const blob = await response.blob();
-          const imageUrl = URL.createObjectURL(blob);
-          return imageUrl;
-        })
-      );
+  // useEffect(() => {
+  //   const fetchImgs = async () => {
+  //     const urls = await Promise.all(
+  //       personSearch.map(async (persona, index) => {
+  //         const response = await fetch(persona.image);
+  //         console.log(response);
+  //         const blob = await response.blob();
+  //         const imageUrl = URL.createObjectURL(blob);
+  //         return imageUrl;
+  //       })
+  //     );
 
-      setImageUrls(urls);
-    };
-    if (personSearch.length > 0) {
-      fetchImgs();
+  //     setImageUrls(urls);
+  //   };
+  //   if (personSearch.length > 0) {
+  //     fetchImgs();
+  //   }
+  // }, [personSearch]);
+  async function fetchImage(persona: iPersona): Promise<string> {
+    if (!persona.image) {
+      throw new Error("imagem não encontrada");
     }
-  }, [personSearch]);
+
+    const response = await fetch(persona.image);
+    const blob = await response.blob();
+    const imageUrl = URL.createObjectURL(blob);
+    return imageUrl;
+  }
+
+  const urls = await Promise.all(
+    personSearch.map(async (persona) => {
+      return fetchImage(persona);
+    })
+  );
 
   return (
     <>
