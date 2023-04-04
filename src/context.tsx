@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, ReactNode } from "react";
 import { iPersona } from "./components/Card/ipersona";
 
 interface FavoriteContextType {
@@ -7,6 +7,9 @@ interface FavoriteContextType {
   getPersonas: () => Promise<{ props: { personas: iPersona[] } }>;
   getImg: (id: number) => Promise<string>;
   addToFavorites: (card: iCard) => void;
+}
+interface IFavoriteProps {
+  children: ReactNode;
 }
 
 export interface iCard {
@@ -24,7 +27,7 @@ export const FavoriteContext = createContext<FavoriteContextType>({
   addToFavorites: (card: iCard) => {},
 });
 
-export const FavoriteProvider: React.FC = ({ children }: any) => {
+export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<iCard[]>([]);
 
   async function getPersonas() {
