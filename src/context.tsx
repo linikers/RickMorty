@@ -13,7 +13,7 @@ interface IFavoriteProps {
 }
 
 export interface iCard {
-  id: number;
+  id?: number;
   name?: string;
   image?: string;
   specie?: string;

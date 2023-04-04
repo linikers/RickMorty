@@ -22,9 +22,11 @@ export default function Home({ personas }: IHomeProps) {
     const fetchImgs = async () => {
       const urls = await Promise.all(
         personas.map(async (persona) => {
-          const response = await fetch(persona.image);
-
-          return response.url;
+          if (persona.image) {
+            const response = await fetch(persona.image);
+            return response.url;
+          }
+          return "";
         })
       );
 
