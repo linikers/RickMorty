@@ -1,4 +1,4 @@
-O arquivo contém mais de 100mb e não está mais upando pelo git
+O arquivo contém mais de 100mb e não está mais upando pelo git(corrigido)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

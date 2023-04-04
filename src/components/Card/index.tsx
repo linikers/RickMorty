@@ -11,15 +11,17 @@ export default function Card({ id, name, image, specie }: iCard) {
   const { setFavorites, favorites, addToFavorites } =
     useContext(FavoriteContext);
 
-  // useEffect(() => {
-  //   if (favorites) {
-  //     console.log(favorites);
-  //   }
-  // }, [favorites]);
-
   return (
     <li key={id} className={styles.card}>
-      <Image src={image} alt={name} width={200} height={180} quality={75} />
+      {image && (
+        <Image
+          src={image}
+          alt={name ? name : ""}
+          width={200}
+          height={180}
+          quality={75}
+        />
+      )}
       <h2>{name}</h2>
       <p>{specie}</p>
       <FavoriteBtn card={{ id, name, image, specie }} />

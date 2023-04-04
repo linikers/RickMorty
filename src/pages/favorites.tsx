@@ -15,9 +15,9 @@ interface IFavoritesProps {
 
 export default function Favorites({ personas }: IFavoritesProps) {
   const { favorites } = useContext(FavoriteContext);
-  console.log(favorites);
+
   const favoritesPersonas = personas.filter((persona) =>
-    favorites.includes(persona?.id || null)
+    favorites.includes(persona?.id || 0)
   );
 
   return (
@@ -70,6 +70,7 @@ export async function getImg(id: number) {
     `https://rickandmortyapi.com/api/character/${id}`
   );
   const data = await response.json();
-  console.log(data.image);
-  return data.image;
+  const image = data.image;
+
+  return image;
 }
