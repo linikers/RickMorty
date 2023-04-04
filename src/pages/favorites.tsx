@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import { useContext, useEffect, useState } from "react";
-import { FavoriteContext } from "@/context";
+import { FavoriteContext, iCard } from "@/context";
 import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { iPersona } from "@/components/Card/ipersona";
@@ -10,14 +10,14 @@ import styles from "@/styles/Search.module.css";
 const inter = Inter({ subsets: ["latin"] });
 
 interface IFavoritesProps {
-  personas: iPersona[];
+  personas: iCard[];
 }
 
 export default function Favorites({ personas }: IFavoritesProps) {
   const { favorites } = useContext(FavoriteContext);
-
+  console.log(favorites);
   const favoritesPersonas = personas.filter((persona) =>
-    favorites.includes(persona?.id || 0)
+    favorites.find((favorite) => favorite.id === persona.id)
   );
 
   return (
