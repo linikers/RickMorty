@@ -1,5 +1,5 @@
 export interface iPersona {
-  id: number;
+  id?: number | null;
   name: string;
   status?: string;
   species?: string;

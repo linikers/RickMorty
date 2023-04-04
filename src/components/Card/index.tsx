@@ -3,49 +3,35 @@ import Image from "next/image";
 import styles from "@/styles/Card.module.css";
 import { useContext, useEffect } from "react";
 
-import { FavoriteContext } from "@/context";
-
-export interface iCard {
-  id?: number;
-  name: string;
-  image?: string;
-  specie?: string;
-}
+import { FavoriteContext, iCard } from "@/context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Card({ id, name, image, specie }: iCard) {
-  const { setFavorites, favorites } = useContext(FavoriteContext);
+  const { setFavorites, favorites, addToFavorites } =
+    useContext(FavoriteContext);
 
-  const addToFavorite = () => {
-    console.log("click");
-    const favorite = { id, name, image, specie };
-    setFavorites([...favorites, favorite]);
-  };
-  useEffect(() => {
-    console.log(favorites);
-  });
+  // useEffect(() => {
+  //   if (favorites) {
+  //     console.log(favorites);
+  //   }
+  // }, [favorites]);
 
   return (
     <li key={id} className={styles.card}>
       <Image src={image} alt={name} width={200} height={180} quality={75} />
       <h2>{name}</h2>
       <p>{specie}</p>
-      <FavoriteBtn {...{ id, name, image, specie, favorites, addToFavorite }} />
+      <FavoriteBtn card={{ id, name, image, specie }} />
     </li>
   );
 }
 
-function FavoriteBtn({
-  id,
-  name,
-  image,
-  specie,
-  favorites,
-  addToFavorite,
-}: iCard & { favorites: iCard[]; addToFavorite: () => void }) {
+function FavoriteBtn({ card }: { card: iCard }) {
+  const { favorites, addToFavorites } = useContext(FavoriteContext);
+
   return (
-    <button className={styles.btnCard} onClick={addToFavorite}>
+    <button className={styles.btnCard} onClick={() => addToFavorites(card)}>
       Favoritos
     </button>
   );

@@ -7,4 +7,11 @@ module.exports = {
   images: {
     domains: ["rickandmortyapi.com"],
   },
+
+  trailingSlash: true,
+  exportPathMap: function () {
+    return {
+      "/": { page: "/" },
+    };
+  },
 };

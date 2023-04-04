@@ -17,7 +17,7 @@ export default function Favorites({ personas }: IFavoritesProps) {
   const { favorites } = useContext(FavoriteContext);
   console.log(favorites);
   const favoritesPersonas = personas.filter((persona) =>
-    favorites.includes(persona.id)
+    favorites.includes(persona?.id || null)
   );
 
   return (
@@ -39,7 +39,7 @@ export default function Favorites({ personas }: IFavoritesProps) {
                 id={persona.id}
                 image={persona.image}
                 name={persona.name}
-                specie={persona.species}
+                specie={persona.specie}
               />
             ))
           ) : (
