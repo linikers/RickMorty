@@ -91,6 +91,7 @@ export default function Search() {
               image={persona.image}
               name={persona.name}
               specie={persona.species}
+              isFavorite={false}
             />
           ))}
         </ul>
