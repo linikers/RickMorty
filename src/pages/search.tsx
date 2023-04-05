@@ -9,10 +9,10 @@ import { iPersona } from "@/components/Card/ipersona";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default async function Search() {
+export default function Search() {
   const router = useRouter();
 
-  const [searchQuey, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [personSearch, setPersonSearch] = useState<iPersona[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
@@ -23,44 +23,55 @@ export default async function Search() {
 
     const { results: personas } = await response.json();
 
-    return {
-      personas,
-    };
+    return personas;
   }
 
-  function SearchPerson(persona: string) {
-    const searchPersona = persona;
-    getSearchProps(searchPersona).then(({ personas }) => {
-      setPersonSearch(personas);
-    });
+  async function fetchImage(persona: iPersona): Promise<string> {
+    try {
+      if (!persona.image) {
+        throw new Error("imagem não encontrada");
+      }
+      const response = await fetch(persona.image);
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      return imageUrl;
+    } catch (error) {
+      console.error(error);
+      return "";
+    }
   }
 
   useEffect(() => {
-    const { q } = router.query;
-
-    if (q) {
-      setSearchQuery(q.toString());
-      SearchPerson(q.toString());
+    async function fetchData() {
+      const { q } = router.query;
+      if (q) {
+        const searchPersona = q.toString();
+        setSearchQuery(searchPersona);
+        try {
+          const personas = await getSearchProps(searchPersona);
+          setPersonSearch(personas);
+          const urls = await Promise.all(
+            personas.map(async (persona: iPersona) => {
+              try {
+                const imageUrl = await fetchImage(persona);
+                return imageUrl;
+              } catch (error) {
+                console.error(error);
+                return "";
+              }
+            })
+          );
+          setImageUrls(urls);
+        } catch (error) {
+          console.error(error);
+          setPersonSearch([]);
+          setImageUrls([]);
+        }
+      }
     }
+    fetchData();
   }, [router.query]);
 
-  async function fetchImage(persona: iPersona): Promise<string> {
-    if (!persona.image) {
-      throw new Error("imagem não encontrada");
-    }
-
-    const response = await fetch(persona.image);
-    const blob = await response.blob();
-    const imageUrl = URL.createObjectURL(blob);
-    return imageUrl;
-  }
-
-  const urls = await Promise.all(
-    personSearch.map(async (persona) => {
-      return fetchImage(persona);
-    })
-  );
-  setImageUrls(urls);
   return (
     <>
       <Head>
@@ -71,13 +82,13 @@ export default async function Search() {
       </Head>
       <Header />
       <main className={styles.main}>
-        <h2>Resultados para {searchQuey}</h2>
+        <h2>Resultados para {searchQuery}</h2>
         <ul className={styles.listPersona}>
           {personSearch.map((persona, index) => (
             <Card
               key={persona.id}
               id={index}
-              image={imageUrls[index]}
+              image={persona.image}
               name={persona.name}
               specie={persona.species}
             />
