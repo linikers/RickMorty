@@ -60,7 +60,7 @@ export default async function Search() {
       return fetchImage(persona);
     })
   );
-
+  setImageUrls(urls);
   return (
     <>
       <Head>
