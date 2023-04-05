@@ -40,6 +40,7 @@ export default function Favorites({ personas }: IFavoritesProps) {
                 image={persona.image}
                 name={persona.name}
                 specie={persona.specie}
+                isFavorite={false}
               />
             ))
           ) : (
