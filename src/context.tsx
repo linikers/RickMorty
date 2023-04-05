@@ -7,16 +7,18 @@ interface FavoriteContextType {
   getPersonas: () => Promise<{ props: { personas: iPersona[] } }>;
   getImg: (id: number) => Promise<string>;
   addToFavorites: (card: iCard) => void;
+  removeFavorites: (id: number) => void;
 }
 interface IFavoriteProps {
   children: ReactNode;
 }
 
 export interface iCard {
-  id?: number;
+  id: number;
   name?: string;
   image?: string;
   specie?: string;
+  isFavorite: boolean;
 }
 
 export const FavoriteContext = createContext<FavoriteContextType>({
@@ -25,6 +27,7 @@ export const FavoriteContext = createContext<FavoriteContextType>({
   getPersonas: async () => ({ props: { personas: [] } }),
   getImg: async (id: number) => "",
   addToFavorites: (card: iCard) => {},
+  removeFavorites: (id: number) => {},
 });
 
 export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
@@ -56,6 +59,13 @@ export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
     setFavorites((prevFavorites) => [...favorites, card]);
     console.log(favorites);
   };
+
+  const removeFavorites = (id: number) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((card) => card.id !== id)
+    );
+  };
+
   return (
     <FavoriteContext.Provider
       value={{
@@ -64,6 +74,7 @@ export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
         getPersonas,
         getImg,
         addToFavorites,
+        removeFavorites,
       }}
     >
       {children}

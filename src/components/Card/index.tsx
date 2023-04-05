@@ -7,17 +7,13 @@ import { FavoriteContext, iCard } from "@/context";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Card({ id, name, image, specie }: iCard) {
-  const { setFavorites, favorites, addToFavorites } =
+export default function Card({ id, name, image, specie, isFavorite }: iCard) {
+  const { setFavorites, favorites, addToFavorites, removeFavorites } =
     useContext(FavoriteContext);
 
-  const [isFavorite, setFavorite] = useState(false);
+  const [cardIsFavorite, setCardIsFavorite] = useState(isFavorite);
   useEffect(() => {
-    if (favorites.some((fav) => fav.id === id)) {
-      setFavorite(true);
-    } else {
-      setFavorite(false);
-    }
+    setCardIsFavorite(favorites.some((fav) => fav.id === id));
   }, [favorites]);
 
   return (
@@ -33,23 +29,43 @@ export default function Card({ id, name, image, specie }: iCard) {
       )}
       <h2>{name}</h2>
       <p>{specie}</p>
-      <FavoriteBtn card={{ id, name, image, specie }} isFavorite={isFavorite} />
+      {cardIsFavorite ? (
+        <button className={styles.btnCard} onClick={() => removeFavorites(id)}>
+          {" "}
+          Remover
+        </button>
+      ) : (
+        <button
+          className={styles.btnCard}
+          onClick={() =>
+            addToFavorites({ id, name, image, specie, isFavorite: true })
+          }
+        >
+          Favorito
+        </button>
+      )}
     </li>
   );
 }
 
-function FavoriteBtn({
-  card,
-  isFavorite,
-}: {
-  card: iCard;
-  isFavorite: boolean;
-}) {
-  const { favorites, addToFavorites } = useContext(FavoriteContext);
+// function FavoriteBtn({
+//   card,
+//   isFavorite,
+// }: {
+//   card: iCard;
+//   isFavorite: boolean;
+// }) {
+//   const { favorites, addToFavorites, removeFavorites } =
+//     useContext(FavoriteContext);
 
-  return (
-    <button className={styles.btnCard} onClick={() => addToFavorites(card)}>
-      {isFavorite ? "Remover" : "Favoritos"}
-    </button>
-  );
-}
+//   return (
+//     <button
+//       className={styles.btnCard}
+//       onClick={() =>
+//         isFavorite ? removeFavorites(card.id) : addToFavorites(card)
+//       }
+//     >
+//       {isFavorite ? "Remover" : "Favorito"}
+//     </button>
+//   );
+// }
