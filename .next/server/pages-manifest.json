@@ -2,6 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/favorites": "pages/favorites.js"
+  "/api/hello": "pages/api/hello.js",
+  "/persona/[id]": "pages/persona/[id].js",
+  "/search": "pages/search.js",
+  "/favorites": "pages/favorites.js",
+  "/": "pages/index.js"
 }

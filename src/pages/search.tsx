@@ -44,24 +44,6 @@ export default async function Search() {
     }
   }, [router.query]);
 
-  // useEffect(() => {
-  //   const fetchImgs = async () => {
-  //     const urls = await Promise.all(
-  //       personSearch.map(async (persona, index) => {
-  //         const response = await fetch(persona.image);
-  //         console.log(response);
-  //         const blob = await response.blob();
-  //         const imageUrl = URL.createObjectURL(blob);
-  //         return imageUrl;
-  //       })
-  //     );
-
-  //     setImageUrls(urls);
-  //   };
-  //   if (personSearch.length > 0) {
-  //     fetchImgs();
-  //   }
-  // }, [personSearch]);
   async function fetchImage(persona: iPersona): Promise<string> {
     if (!persona.image) {
       throw new Error("imagem não encontrada");
