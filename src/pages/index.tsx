@@ -50,10 +50,12 @@ export default function Home({ personas }: IHomeProps) {
             {personas &&
               personas.map((persona, index) => (
                 <Card
-                  key={persona.id}
+                  key={index}
+                  id={persona.id ?? 0}
                   image={imageUrls[index]}
                   name={persona.name}
                   specie={persona.species}
+                  isFavorite={false}
                 />
               ))}
           </ul>
