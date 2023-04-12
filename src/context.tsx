@@ -8,6 +8,9 @@ interface FavoriteContextType {
   getImg: (id: number) => Promise<string>;
   addToFavorites: (card: iCard) => void;
   removeFavorites: (id: number) => void;
+
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 interface IFavoriteProps {
   children: ReactNode;
@@ -28,10 +31,15 @@ export const FavoriteContext = createContext<FavoriteContextType>({
   getImg: async (id: number) => "",
   addToFavorites: (card: iCard) => {},
   removeFavorites: (id: number) => {},
+
+  page: 0,
+  setPage: () => {},
 });
 
 export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<iCard[]>([]);
+
+  const [page, setPage] = useState<number>(0);
 
   async function getPersonas() {
     const response = await fetch("https://rickandmortyapi.com/api/character");
@@ -54,10 +62,7 @@ export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
   }
 
   const addToFavorites = (card: iCard) => {
-    console.log("click");
-
     setFavorites((prevFavorites) => [...favorites, card]);
-    console.log(favorites);
   };
 
   const removeFavorites = (id: number) => {
@@ -75,6 +80,9 @@ export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
         getImg,
         addToFavorites,
         removeFavorites,
+
+        page,
+        setPage,
       }}
     >
       {children}

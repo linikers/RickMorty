@@ -6,17 +6,20 @@ import Card from "@/components/Card";
 import { useState, useEffect, useContext } from "react";
 import { iPersona } from "@/components/Card/ipersona";
 import { FavoriteContext } from "@/context";
+import ReactPaginate from "react-paginate";
 
 const inter = Inter({ subsets: ["latin"] });
 
 interface IHomeProps {
   personas: iPersona[];
 }
-
+interface IPageSelected {
+  selected: number;
+}
 export default function Home({ personas }: IHomeProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
-  const { favorites } = useContext(FavoriteContext);
+  const { favorites, page, setPage } = useContext(FavoriteContext);
 
   useEffect(() => {
     const fetchImgs = async () => {
@@ -34,6 +37,17 @@ export default function Home({ personas }: IHomeProps) {
     };
     fetchImgs();
   }, [personas]);
+
+  const itemsPerPage = 12;
+
+  const pageCount = Math.ceil(personas.length / itemsPerPage);
+  const offset = page + itemsPerPage;
+  const currentItems = personas.slice(offset, offset + itemsPerPage);
+
+  function handlePage(selectedItem: { selected: number }) {
+    setPage(selectedItem.selected);
+  }
+
   return (
     <>
       <Head>
@@ -44,22 +58,32 @@ export default function Home({ personas }: IHomeProps) {
       </Head>
 
       <Header />
+
       <main className={styles.main}>
-        <div>
-          <ul className={styles.listPersona}>
-            {personas &&
-              personas.map((persona, index) => (
-                <Card
-                  key={index}
-                  id={persona.id ?? 0}
-                  image={imageUrls[index]}
-                  name={persona.name}
-                  specie={persona.species}
-                  isFavorite={false}
-                />
-              ))}
-          </ul>
-        </div>
+        <ul className={styles.listPersona}>
+          {currentItems.map((persona, index) => (
+            <Card
+              key={index}
+              id={persona.id ?? 0}
+              image={imageUrls[index]}
+              name={persona.name}
+              specie={persona.species}
+              isFavorite={false}
+            />
+          ))}
+        </ul>
+        <ReactPaginate
+          previousLabel={"< Volta"}
+          nextLabel={"Próximo"}
+          breakLabel={"..."}
+          breakClassName={"breake"}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePage}
+          containerClassName={"paginate"}
+          activeClassName={"active"}
+        />
       </main>
     </>
   );
