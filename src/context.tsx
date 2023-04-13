@@ -39,7 +39,7 @@ export const FavoriteContext = createContext<FavoriteContextType>({
 export const FavoriteProvider: React.FC<IFavoriteProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<iCard[]>([]);
 
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
 
   async function getPersonas() {
     const response = await fetch("https://rickandmortyapi.com/api/character");

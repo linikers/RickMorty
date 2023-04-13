@@ -38,14 +38,16 @@ export default function Home({ personas }: IHomeProps) {
     fetchImgs();
   }, [personas]);
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 20;
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalItems, setTotalItems] = useState<number>(0);
 
   const pageCount = Math.ceil(personas.length / itemsPerPage);
-  const offset = page + itemsPerPage;
+  const offset = page * itemsPerPage;
   const currentItems = personas.slice(offset, offset + itemsPerPage);
 
   function handlePage(selectedItem: { selected: number }) {
-    setPage(selectedItem.selected);
+    setPage(selectedItem.selected + 1);
   }
 
   return (
@@ -65,7 +67,7 @@ export default function Home({ personas }: IHomeProps) {
             <Card
               key={index}
               id={persona.id ?? 0}
-              image={imageUrls[index]}
+              image={imageUrls[offset + index]}
               name={persona.name}
               specie={persona.species}
               isFavorite={false}
@@ -73,23 +75,26 @@ export default function Home({ personas }: IHomeProps) {
           ))}
         </ul>
         <ReactPaginate
-          previousLabel={"< Volta"}
+          previousLabel={"< Anterior"}
           nextLabel={"Próximo"}
           breakLabel={"..."}
-          breakClassName={"breake"}
+          breakClassName={"break"}
           pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePage}
           containerClassName={"paginate"}
           activeClassName={"active"}
+          initialPage={page - 1}
         />
       </main>
     </>
   );
 }
 export async function getStaticProps() {
-  const response = await fetch("https://rickandmortyapi.com/api/character");
+  const response = await fetch(
+    `https://rickandmortyapi.com/api/character?page=${page}`
+  );
   console.log(response);
   const { results: personas } = await response.json();
 
