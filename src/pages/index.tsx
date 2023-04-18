@@ -22,29 +22,52 @@ export default function Home({ personas }: IHomeProps) {
   const { favorites, page, setPage } = useContext(FavoriteContext);
 
   useEffect(() => {
-    const fetchImgs = async () => {
-      const urls = await Promise.all(
-        personas.map(async (persona) => {
-          if (persona.image) {
-            const response = await fetch(persona.image);
-            return response.url;
-          }
-          return "";
-        })
-      );
+    if (personas) {
+      const fetchImgs = async () => {
+        const urls = await Promise.all(
+          personas.map(async (persona) => {
+            if (persona.image) {
+              const response = await fetch(persona.image);
+              return response.url;
+            }
+            return "";
+          })
+        );
 
-      setImageUrls(urls);
-    };
-    fetchImgs();
+        setImageUrls(urls);
+      };
+      fetchImgs();
+    }
   }, [personas]);
 
   const itemsPerPage = 20;
+
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalItems, setTotalItems] = useState<number>(0);
 
-  const pageCount = Math.ceil(personas.length / itemsPerPage);
-  const offset = page * itemsPerPage;
-  const currentItems = personas.slice(offset, offset + itemsPerPage);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `https://rickandmortyapi.com/api/character?page=${page}`
+      );
+      const data = await response.json();
+      setTotalPages(data.info.pages);
+      setTotalItems(data.info.count);
+      const personas = data.results;
+      console.log(personas);
+      return {
+        props: { personas },
+      };
+    };
+
+    fetchData();
+  }, [page]);
+  console.log(personas);
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+  const offset = (page - 1) * itemsPerPage;
+  const currentItems = personas
+    ? personas.slice(offset, offset + itemsPerPage)
+    : [];
 
   function handlePage(selectedItem: { selected: number }) {
     setPage(selectedItem.selected + 1);
@@ -79,7 +102,7 @@ export default function Home({ personas }: IHomeProps) {
           nextLabel={"Próximo"}
           breakLabel={"..."}
           breakClassName={"break"}
-          pageCount={pageCount}
+          pageCount={totalPages}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePage}
@@ -91,19 +114,17 @@ export default function Home({ personas }: IHomeProps) {
     </>
   );
 }
-export async function getStaticProps() {
-  const response = await fetch(
-    `https://rickandmortyapi.com/api/character?page=${page}`
-  );
-  console.log(response);
-  const { results: personas } = await response.json();
+// export async function getStaticProps() {
+//   const response = await fetch(`https://rickandmortyapi.com/api/character`);
 
-  return {
-    props: {
-      personas,
-    },
-  };
-}
+//   const { results: personas } = await response.json();
+
+//   return {
+//     props: {
+//       personas,
+//     },
+//   };
+// }
 export async function getImg(id: number) {
   const response = await fetch(
     `https://rickandmortyapi.com/api/character/${id}`
