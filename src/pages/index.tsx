@@ -27,9 +27,7 @@ export default function Home({ personas }: IHomeProps) {
 
   const itemsPerPage = 20;
 
-  console.log(currentPage);
-  console.log(characters);
-  const offset = currentPage * itemsPerPage;
+  const offset = (currentPage - 1) * itemsPerPage;
   const currentItems =
     characters && characters.slice(offset, offset + itemsPerPage);
 
@@ -67,7 +65,7 @@ export default function Home({ personas }: IHomeProps) {
   useEffect(() => {
     fetchData(currentPage);
   }, [currentPage]);
-  console.log(currentItems);
+
   return (
     <>
       <Head>
@@ -86,7 +84,7 @@ export default function Home({ personas }: IHomeProps) {
               <Card
                 key={index}
                 id={persona.id ?? 0}
-                image={imageUrls[offset + index]}
+                image={imageUrls[index]}
                 name={persona.name}
                 specie={persona.species}
                 isFavorite={false}
