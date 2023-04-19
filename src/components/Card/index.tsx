@@ -47,25 +47,3 @@ export default function Card({ id, name, image, specie, isFavorite }: iCard) {
     </li>
   );
 }
-
-// function FavoriteBtn({
-//   card,
-//   isFavorite,
-// }: {
-//   card: iCard;
-//   isFavorite: boolean;
-// }) {
-//   const { favorites, addToFavorites, removeFavorites } =
-//     useContext(FavoriteContext);
-
-//   return (
-//     <button
-//       className={styles.btnCard}
-//       onClick={() =>
-//         isFavorite ? removeFavorites(card.id) : addToFavorites(card)
-//       }
-//     >
-//       {isFavorite ? "Remover" : "Favorito"}
-//     </button>
-//   );
-// }
