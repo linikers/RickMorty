@@ -13,12 +13,16 @@
   flex-wrap: wrap;
   list-style: none;
 }
-
 .paginate {
   display: flex;
   flex-direction: row;
 }
-
+.paginate li {
+  margin: 0.2rem;
+  padding: 0.2rem;
+  background-color: var(--color-base-0);
+  border-radius: 8px;
+}
 /* Mobile */
 @media (max-width: 700px) {
   .content {

@@ -92,15 +92,15 @@ export default function Home({ personas }: IHomeProps) {
             ))}
         </ul>
         <ReactPaginate
-          previousLabel={"< Anterior"}
-          nextLabel={"Próximo"}
+          previousLabel={"< Anterior "}
+          nextLabel={" Próximo >"}
           breakLabel={"..."}
           breakClassName={"break"}
           pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={2}
           onPageChange={handlePageClick}
-          containerClassName={"paginate"}
+          containerClassName={styles.paginate}
           activeClassName={"active"}
           initialPage={currentPage}
         />
